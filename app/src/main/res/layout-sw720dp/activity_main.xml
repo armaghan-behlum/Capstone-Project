@@ -20,9 +20,24 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
+        <fragment
+            android:name="com.upaudio.armi.upaudio.ui.PodcastListFragment"
+            android:id="@+id/podcast_list_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+
+        <fragment
+            android:name="com.upaudio.armi.upaudio.ui.PlayerFragment"
+            android:id="@+id/player_fragment"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

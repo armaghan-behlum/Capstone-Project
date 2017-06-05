@@ -15,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,13 +111,11 @@ public class PodcastListFragment extends Fragment implements ActivityCompat.OnRe
 
     @Override
     public Loader<List<File>> onCreateLoader(int id, Bundle args) {
-        Timber.e("PodcastListFragment#onCreateLoader:106 - loader created");
         return new PodcastFileAsyncTaskLoader(getContext());
     }
 
     @Override
     public void onLoadFinished(Loader<List<File>> loader, List<File> data) {
-        Timber.e("PodcastListFragment#onLoadFinished:113 - loader finished");
         podcastFilesListAdapter.updateFiles(data);
         if (data.isEmpty()) {
             emptyListMessageView.setVisibility(View.VISIBLE);
