@@ -3,6 +3,7 @@
     <string name="action_settings" translatable="false">Settings</string>
 
     <string name="empty_podcast_list_message">Sorry, we could not find any podcasts. Please add them to the Podcast file on your device</string>
+    <string name="sign_in_prompt">Please sign-in to use notes</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

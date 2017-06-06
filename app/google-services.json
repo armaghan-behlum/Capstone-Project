@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "367548962025",
+    "firebase_url": "https://upaudio-301d1.firebaseio.com",
+    "project_id": "upaudio-301d1",
+    "storage_bucket": "upaudio-301d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367548962025:android:72e6fd59df9d8e43",
+        "android_client_info": {
+          "package_name": "com.upaudio.armi.upaudio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367548962025-84g6jreisn19te4o1p2dfv9bjr7ajjsp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.upaudio.armi.upaudio",
+            "certificate_hash": "821133a6bee85e334141c9cdbcaa523e1c2e114f"
+          }
+        },
+        {
+          "client_id": "367548962025-bg6r75sfg97s8ga0p5v1r28v0qb4u3fa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1HhYbmHBURtuGDIe1UABWfw4vGJP3BTk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367548962025-bg6r75sfg97s8ga0p5v1r28v0qb4u3fa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

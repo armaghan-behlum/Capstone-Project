@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.upaudio.armi.upaudio.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Broadcast receiver for player play requests
      */
-    BroadcastReceiver playerBroadcastReceiver;
+    private BroadcastReceiver playerBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
             playerFragment = (PlayerFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.player_fragment);
 
+        }
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) {
+            Intent intent = new Intent(this, SignInActivity.class);
+            startActivity(intent);
         }
     }
 
