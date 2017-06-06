@@ -1,6 +1,20 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        releaseSignConfig {
+            keyAlias 'AndroidKey'
+            keyPassword 'password'
+            storeFile file('/Users/behluma/Dropbox/Udacity/Android/UdacityCapstoneProject/keystore.jks')
+            storePassword 'password'
+        }
+        debugSignConfig {
+            keyAlias 'AndroidKey'
+            keyPassword 'password'
+            storeFile file('/Users/behluma/Dropbox/Udacity/Android/UdacityCapstoneProject/debug_keystore.jks')
+            storePassword 'password'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -15,12 +29,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseSignConfig
+        }
+        debug {
+            signingConfig signingConfigs.debugSignConfig
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
