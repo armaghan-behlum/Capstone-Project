@@ -99,6 +99,14 @@ public class PodcastPlayer {
         player.prepare(videoSource);
     }
 
+    /**
+     * Gets current position in player
+     *
+     * @return current position
+     */
+    public long getCurrentPosition() {
+        return player.getCurrentPosition();
+    }
 
     /**
      * Release player to free up resources
