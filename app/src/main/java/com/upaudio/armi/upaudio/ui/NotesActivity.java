@@ -63,7 +63,8 @@ public class NotesActivity extends AppCompatActivity {
                             .replace(R.id.fragment_container, noteEditorFragment)
                             .addToBackStack(NoteEditorFragment.class.toString()).commit();
                 } else {
-                    noteEditorFragment.updateNote(getIntent().getStringExtra(EXTRA_NOTE_ID));
+                    noteEditorFragment.updateNote(getIntent().getStringExtra(NotesActivity.EXTRA_FILE),
+                            getIntent().getStringExtra(EXTRA_NOTE_ID));
                 }
             }
         } else {
@@ -76,7 +77,8 @@ public class NotesActivity extends AppCompatActivity {
                         .findFragmentById(R.id.note_list_fragment);
             }
 
-            noteEditorFragment.updateNote(getIntent().getStringExtra(EXTRA_NOTE_ID));
+            noteEditorFragment.updateNote(getIntent().getStringExtra(EXTRA_FILE),
+                    getIntent().getStringExtra(EXTRA_NOTE_ID));
         }
     }
 

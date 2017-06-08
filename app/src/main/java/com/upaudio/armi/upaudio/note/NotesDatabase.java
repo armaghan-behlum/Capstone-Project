@@ -4,8 +4,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+
+import timber.log.Timber;
 
 /**
  * Wrapper for Firebase Realtime Database that simplifies calls
@@ -52,23 +55,58 @@ public class NotesDatabase {
     }
 
     /**
-     * Registers event listener for a file
+     * Updates UpAudio note
+     *
+     * @param note note to be saved
+     * @param noteId id of note
+     */
+    public void updateUpAudio(UpAudioNote note, String noteId) {
+        String newNote = UpAudioNote.getGson().toJson(note, UpAudioNote.class);
+        userRef.child(getKeyFromFile(note.getFileName())).child(noteId).setValue(newNote);
+    }
+
+    /**
+     * Registers event listener for a list of notes associated with a file
      *
      * @param childEventListener child event listener
      * @param fileName file that is being tracked
      */
-    public void registerChildEventListener(ChildEventListener childEventListener, String fileName) {
+    public void registerListChangeListener(ChildEventListener childEventListener, String fileName) {
         userRef.child(getKeyFromFile(fileName)).addChildEventListener(childEventListener);
     }
 
     /**
-     * Unregisters event listener for a file
+     * Unregisters event listener for a list of notes associated with a file
      *
      * @param childEventListener child event listener
      * @param fileName file that was being tracked
      */
-    public void unregisterChildEventListener(ChildEventListener childEventListener, String fileName) {
+    public void unregisterListChangeListener(ChildEventListener childEventListener, String fileName) {
         userRef.child(getKeyFromFile(fileName)).removeEventListener(childEventListener);
+    }
+
+    /**
+     * Registers listener for changes in a single note
+     *
+     * @param valueEventListener listener for events
+     * @param fileName file name note is associated with
+     * @param noteKey note being monitored
+     */
+    public void registerNoteListener(ValueEventListener valueEventListener, String fileName, String noteKey) {
+        Timber.e("NotesDatabase#registerNoteListener:83 - file name - " + fileName);
+        Timber.e("NotesDatabase#registerNoteListener:86 - note key - " + noteKey);
+        userRef.child(getKeyFromFile(fileName)).child(noteKey).addValueEventListener(valueEventListener);
+    }
+
+    /**
+     * Registers listener for changes in a single note
+     *
+     * @param valueEventListener listener for events
+     * @param fileName file name note is associated with
+     * @param noteKey note being monitored
+     */
+    public void unregisterNoteListener(ValueEventListener valueEventListener, String fileName, String noteKey) {
+        userRef.child(getKeyFromFile(fileName)).child(noteKey).removeEventListener(valueEventListener);
     }
 
     /**

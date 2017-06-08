@@ -16,8 +16,6 @@ import com.upaudio.armi.upaudio.note.UpAudioNote;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Notes list adapter
  */
@@ -45,13 +43,13 @@ class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHol
      */
     void updateFileName(String fileName) {
         if (this.fileName != null) {
-            NotesDatabase.getInstance().unregisterChildEventListener(this, this.fileName);
+            NotesDatabase.getInstance().unregisterListChangeListener(this, this.fileName);
         }
         this.fileName = fileName;
         upAudioNoteList.clear();
         keyList.clear();
         notifyDataSetChanged();
-        NotesDatabase.getInstance().registerChildEventListener(this, fileName);
+        NotesDatabase.getInstance().registerListChangeListener(this, fileName);
     }
 
     @Override
@@ -118,7 +116,6 @@ class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHol
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();
-            Timber.e("NoteViewHolder#onClick:121 - on click set");
             intent.setAction(NotesActivity.ACTION_EDIT_NOTE);
             intent.putExtra(NotesActivity.EXTRA_FILE, fileName);
             intent.putExtra(NotesActivity.EXTRA_NOTE_ID, keyList.get(getAdapterPosition()));

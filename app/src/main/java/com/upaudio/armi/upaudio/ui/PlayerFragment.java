@@ -22,7 +22,6 @@ import com.upaudio.armi.upaudio.player.PodcastPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -113,10 +112,10 @@ public class PlayerFragment extends Fragment implements ChildEventListener {
      */
     public void updateFile(String fileToPlay) {
         if (currentFileName != null) {
-            NotesDatabase.getInstance().unregisterChildEventListener(this, currentFileName);
+            NotesDatabase.getInstance().unregisterListChangeListener(this, currentFileName);
         }
         currentFileName = fileToPlay;
-        NotesDatabase.getInstance().registerChildEventListener(this, fileToPlay);
+        NotesDatabase.getInstance().registerListChangeListener(this, fileToPlay);
         podcastPlayer.start(playerView, fileToPlay);
     }
 

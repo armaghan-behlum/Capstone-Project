@@ -7,4 +7,11 @@
 
     <string name="note_added_message">UpAudio added</string>
     <string name="edit_note">Edit</string>
+
+    <string name="note_title">UpAudio Name: </string>
+    <string name="note_message">Note: </string>
+    <string name="start_time">Start Time: </string>
+    <string name="end_time">End Time: </string>
+    <string name="add_note">Add a note</string>
+    <string name="save">Save UpAudio</string>
 </resources>
