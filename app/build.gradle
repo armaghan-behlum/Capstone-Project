@@ -5,13 +5,13 @@ android {
         releaseSignConfig {
             keyAlias 'AndroidKey'
             keyPassword 'password'
-            storeFile file('/Users/behluma/Dropbox/Udacity/Android/UdacityCapstoneProject/keystore.jks')
+            storeFile file('../keystore.jks')
             storePassword 'password'
         }
         debugSignConfig {
             keyAlias 'AndroidKey'
             keyPassword 'password'
-            storeFile file('/Users/behluma/Dropbox/Udacity/Android/UdacityCapstoneProject/debug_keystore.jks')
+            storeFile file('../debug_keystore.jks')
             storePassword 'password'
         }
     }

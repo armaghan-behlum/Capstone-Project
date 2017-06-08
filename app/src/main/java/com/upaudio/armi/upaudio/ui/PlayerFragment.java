@@ -10,18 +10,21 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.upaudio.armi.upaudio.R;
+import com.upaudio.armi.upaudio.note.NotesDatabase;
 import com.upaudio.armi.upaudio.note.UpAudioNote;
 import com.upaudio.armi.upaudio.player.PodcastPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayerFragment extends Fragment {
+public class PlayerFragment extends Fragment implements ChildEventListener {
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView playerView;
@@ -80,6 +83,7 @@ public class PlayerFragment extends Fragment {
                 } else {
                     isRecording = false;
                     UpAudioNote upAudioNote = new UpAudioNote(currentFileName, startTime, podcastPlayer.getCurrentPosition());
+                    NotesDatabase.getInstance().saveUpAudio(upAudioNote);
                 }
             }
         });
@@ -92,8 +96,36 @@ public class PlayerFragment extends Fragment {
      * @param fileToPlay file to start playing
      */
     public void updateFile(String fileToPlay) {
+        if (currentFileName != null) {
+            NotesDatabase.getInstance().unregisterChildEventListener(this, currentFileName);
+        }
         currentFileName = fileToPlay;
+        NotesDatabase.getInstance().registerChildEventListener(this, fileToPlay);
         podcastPlayer.start(playerView, fileToPlay);
     }
 
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        // TODO: Add snack bar pop up to modify snapshot
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        // No-op
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+        // No-op
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        // No-op
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        // No-op
+    }
 }
