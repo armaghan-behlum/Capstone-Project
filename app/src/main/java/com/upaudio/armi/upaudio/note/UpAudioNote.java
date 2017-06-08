@@ -24,6 +24,7 @@ public class UpAudioNote {
         return gson;
     }
 
+
     /**
      * Filename of UpAudio
      */
@@ -38,6 +39,11 @@ public class UpAudioNote {
      * End time of UpAudio
      */
     private final long endTime;
+
+    /**
+     * Name of the note
+     */
+    private String noteName;
 
     /**
      * Option note that UpAudio can have
@@ -88,6 +94,14 @@ public class UpAudioNote {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getNoteName() {
+        return noteName;
+    }
+
+    public void setNoteName(String noteName) {
+        this.noteName = noteName;
     }
 
     @Override

@@ -43,10 +43,12 @@ public class NotesDatabase {
      * Saves UpAudio note
      *
      * @param note UpAudio note
+     * @return key of new saved item
      */
-    public void saveUpAudio(UpAudioNote note) {
+    public String saveUpAudio(UpAudioNote note) {
         DatabaseReference pushRef = userRef.child(getKeyFromFile(note.getFileName())).push();
         pushRef.setValue(UpAudioNote.getGson().toJson(note, UpAudioNote.class));
+        return pushRef.getKey();
     }
 
     /**

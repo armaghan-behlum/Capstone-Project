@@ -1,8 +1,10 @@
 package com.upaudio.armi.upaudio.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.upaudio.armi.upaudio.player.PodcastPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,9 +66,9 @@ public class PlayerFragment extends Fragment implements ChildEventListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_player, container, false);
+        final View view = inflater.inflate(R.layout.fragment_player, container, false);
         ButterKnife.bind(this, view);
 
         Bundle arguments = getArguments();
@@ -83,7 +86,20 @@ public class PlayerFragment extends Fragment implements ChildEventListener {
                 } else {
                     isRecording = false;
                     UpAudioNote upAudioNote = new UpAudioNote(currentFileName, startTime, podcastPlayer.getCurrentPosition());
-                    NotesDatabase.getInstance().saveUpAudio(upAudioNote);
+                    upAudioNote.setNoteName("new note");
+                    final String key = NotesDatabase.getInstance().saveUpAudio(upAudioNote);
+                    Snackbar snackbar = Snackbar.make(view, R.string.note_added_message, Snackbar.LENGTH_LONG);
+                    snackbar.setAction(R.string.edit_note, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent();
+                            intent.setAction(NotesActivity.ACTION_EDIT_NOTE);
+                            intent.putExtra(NotesActivity.EXTRA_FILE, currentFileName);
+                            intent.putExtra(NotesActivity.EXTRA_NOTE_ID, key);
+                            startActivity(intent);
+                        }
+                    });
+                    snackbar.show();
                 }
             }
         });

@@ -6,9 +6,25 @@
     android:layout_height="match_parent"
     tools:context="com.upaudio.armi.upaudio.ui.NotesActivity">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <fragment
+            android:name="com.upaudio.armi.upaudio.ui.NoteListFragment"
+            android:id="@+id/note_list_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+
+        <fragment
+            android:name="com.upaudio.armi.upaudio.ui.NoteEditorFragment"
+            android:id="@+id/note_editor_fragment"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
