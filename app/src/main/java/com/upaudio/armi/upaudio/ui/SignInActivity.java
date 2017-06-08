@@ -87,11 +87,28 @@ public class SignInActivity extends AppCompatActivity
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Timber.e("MainActivity#onComplete:153 - fire base attempt - " + task.isSuccessful());
-                        finish();
+                        if (!task.isSuccessful()) {
+                            Timber.e("Could not sign in with Google, will try anonymously");
+                            signInAnonymously();
+                        } else {
+                            finish();
+                        }
                     }
                 });
 
+    }
+
+    private void signInAnonymously() {
+        firebaseAuthRef.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    finish();
+                } else {
+                    Timber.e("Could not sign in");
+                }
+            }
+        });
     }
 
     @Override
