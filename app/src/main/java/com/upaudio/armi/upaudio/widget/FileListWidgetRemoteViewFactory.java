@@ -61,7 +61,7 @@ public class FileListWidgetRemoteViewFactory implements RemoteViewsService.Remot
         remoteViews.setTextViewText(android.R.id.text1, file.getName());
 
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_FILE_NAME, file.getAbsolutePath());
+        intent.putExtra(MainActivity.EXTRA_FILE_NAME, file.getName());
         remoteViews.setOnClickFillInIntent(android.R.id.text1, intent);
         return remoteViews;
     }

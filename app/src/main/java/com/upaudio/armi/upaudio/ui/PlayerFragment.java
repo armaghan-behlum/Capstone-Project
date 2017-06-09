@@ -18,6 +18,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.upaudio.armi.upaudio.R;
+import com.upaudio.armi.upaudio.io.AudioFilesManager;
 import com.upaudio.armi.upaudio.note.NotesDatabase;
 import com.upaudio.armi.upaudio.note.UpAudioNote;
 import com.upaudio.armi.upaudio.player.PodcastPlayer;
@@ -86,7 +87,7 @@ public class PlayerFragment extends Fragment {
                         isRecording = false;
                         addNoteButton.setImageResource(R.drawable.add_note_white);
                         UpAudioNote upAudioNote = new UpAudioNote(currentFileName, startTime, podcastPlayer.getCurrentPosition());
-                        upAudioNote.setNoteName("new note");
+                        upAudioNote.setNoteName(getString(R.string.new_note));
                         final String key = NotesDatabase.getInstance().saveUpAudio(upAudioNote);
                         Snackbar snackbar = Snackbar.make(view, R.string.note_added_message, Snackbar.LENGTH_LONG);
                         snackbar.setAction(R.string.edit_note, new View.OnClickListener() {
@@ -120,6 +121,6 @@ public class PlayerFragment extends Fragment {
             return;
         }
         currentFileName = fileToPlay;
-        podcastPlayer.start(playerView, fileToPlay);
+        podcastPlayer.start(playerView, AudioFilesManager.getPodcastFilePath(fileToPlay));
     }
 }

@@ -63,6 +63,17 @@ public class AudioFilesManager {
     }
 
     /**
+     * Returns the absolute path of the podcast file
+     *
+     * @param fileName file name
+     * @return absolute name
+     */
+    public static String getPodcastFilePath(String fileName) {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS).toString()
+                + "/" + fileName;
+    }
+
+    /**
      * Finds audio files in a given directory
      *
      * @param directory directory to search
