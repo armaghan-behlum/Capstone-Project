@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayerFragment extends Fragment implements ChildEventListener {
+public class PlayerFragment extends Fragment {
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView playerView;
@@ -71,34 +73,40 @@ public class PlayerFragment extends Fragment implements ChildEventListener {
         ButterKnife.bind(this, view);
         updateFile(getActivity().getIntent().getStringExtra(MainActivity.EXTRA_FILE_NAME));
 
-        addNoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isRecording) {
-                    isRecording = true;
-                    addNoteButton.setImageResource(R.drawable.add_note_black);
-                    startTime = podcastPlayer.getCurrentPosition();
-                } else {
-                    isRecording = false;
-                    addNoteButton.setImageResource(R.drawable.add_note_white);
-                    UpAudioNote upAudioNote = new UpAudioNote(currentFileName, startTime, podcastPlayer.getCurrentPosition());
-                    upAudioNote.setNoteName("new note");
-                    final String key = NotesDatabase.getInstance().saveUpAudio(upAudioNote);
-                    Snackbar snackbar = Snackbar.make(view, R.string.note_added_message, Snackbar.LENGTH_LONG);
-                    snackbar.setAction(R.string.edit_note, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent();
-                            intent.setAction(NotesActivity.ACTION_EDIT_NOTE);
-                            intent.putExtra(NotesActivity.EXTRA_FILE, currentFileName);
-                            intent.putExtra(NotesActivity.EXTRA_NOTE_ID, key);
-                            startActivity(intent);
-                        }
-                    });
-                    snackbar.show();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            addNoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isRecording) {
+                        isRecording = true;
+                        addNoteButton.setImageResource(R.drawable.add_note_black);
+                        startTime = podcastPlayer.getCurrentPosition();
+                    } else {
+                        isRecording = false;
+                        addNoteButton.setImageResource(R.drawable.add_note_white);
+                        UpAudioNote upAudioNote = new UpAudioNote(currentFileName, startTime, podcastPlayer.getCurrentPosition());
+                        upAudioNote.setNoteName("new note");
+                        final String key = NotesDatabase.getInstance().saveUpAudio(upAudioNote);
+                        Snackbar snackbar = Snackbar.make(view, R.string.note_added_message, Snackbar.LENGTH_LONG);
+                        snackbar.setAction(R.string.edit_note, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent();
+                                intent.setAction(NotesActivity.ACTION_EDIT_NOTE);
+                                intent.putExtra(NotesActivity.EXTRA_FILE, currentFileName);
+                                intent.putExtra(NotesActivity.EXTRA_NOTE_ID, key);
+                                startActivity(intent);
+                            }
+                        });
+                        snackbar.show();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            addNoteButton.setEnabled(false);
+            addNoteButton.setImageResource(R.drawable.add_note_grey);
+        }
         return view;
     }
 
@@ -111,36 +119,7 @@ public class PlayerFragment extends Fragment implements ChildEventListener {
         if (fileToPlay == null) {
             return;
         }
-        if (currentFileName != null) {
-            NotesDatabase.getInstance().unregisterListChangeListener(this, currentFileName);
-        }
         currentFileName = fileToPlay;
-        NotesDatabase.getInstance().registerListChangeListener(this, fileToPlay);
         podcastPlayer.start(playerView, fileToPlay);
-    }
-
-    @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        // TODO: Add snack bar pop up to modify snapshot
-    }
-
-    @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        // No-op
-    }
-
-    @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
-        // No-op
-    }
-
-    @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        // No-op
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-        // No-op
     }
 }

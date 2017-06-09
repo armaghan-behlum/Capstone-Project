@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.upaudio.armi.upaudio.R;
 
 import butterknife.BindView;
@@ -36,6 +37,9 @@ public class NoteListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            return;
+        }
         notesListAdapter = new NotesListAdapter();
         notesListAdapter.updateFileName(getActivity().getIntent().getStringExtra(NotesActivity.EXTRA_FILE));
     }

@@ -67,6 +67,7 @@ public class SignInActivity extends AppCompatActivity
                 firebaseAuth(account);
             } else {
                 Timber.e("MainActivity#onActivityResult: Google sign in failed");
+                signInAnonymously();
             }
         }
     }
@@ -98,6 +99,9 @@ public class SignInActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Signs in anonymously so user can still use the app
+     */
     private void signInAnonymously() {
         firebaseAuthRef.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -117,7 +121,6 @@ public class SignInActivity extends AppCompatActivity
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)

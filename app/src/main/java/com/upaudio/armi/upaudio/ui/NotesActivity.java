@@ -2,9 +2,12 @@ package com.upaudio.armi.upaudio.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.upaudio.armi.upaudio.R;
 
 public class NotesActivity extends AppCompatActivity {
@@ -39,6 +42,12 @@ public class NotesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
 
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) {
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.root_view), R.string.sorry_not_signed_in, Snackbar.LENGTH_LONG);
+            snackbar.show();
+            finish();
+        }
         if (savedInstanceState == null) {
             onNewIntent(getIntent());
         }
