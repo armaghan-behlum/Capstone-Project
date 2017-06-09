@@ -1,5 +1,6 @@
 package com.upaudio.armi.upaudio.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.upaudio.armi.upaudio.R;
 import com.upaudio.armi.upaudio.note.NotesDatabase;
 import com.upaudio.armi.upaudio.note.UpAudioNote;
 
@@ -55,13 +57,18 @@ class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHol
     @Override
     public NoteViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(android.R.layout.simple_expandable_list_item_1, viewGroup, false);
+                .inflate(R.layout.note_list_item, viewGroup, false);
         return new NoteViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(NoteViewHolder noteViewHolder, int position) {
-        noteViewHolder.noteTextView.setText(upAudioNoteList.get(position).getNoteName());
+        UpAudioNote upAudioNote = upAudioNoteList.get(position);
+        Context context = noteViewHolder.itemView.getContext();
+        noteViewHolder.titleTextView.setText(upAudioNote.getNoteName());
+        noteViewHolder.startTextView.setText(context.getString(R.string.start_time_and_val, upAudioNote.getStartTime()));
+        noteViewHolder.endTextView.setText(context.getString(R.string.end_time_and_val, upAudioNote.getEndTime()));
+        noteViewHolder.messageTextView.setText(upAudioNote.getNote());
     }
 
     @Override
@@ -71,20 +78,36 @@ class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHol
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String key) {
-        keyList.add(key);
         UpAudioNote upAudioNote = UpAudioNote.getGson().fromJson(dataSnapshot.getValue().toString(), UpAudioNote.class);
+        keyList.add(dataSnapshot.getKey());
         upAudioNoteList.add(upAudioNote);
         notifyItemInserted(upAudioNoteList.size() - 1);
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+        String key = dataSnapshot.getKey();
+        int position = keyList.indexOf(key);
+        if (position == -1) {
+            return;
+        }
+        UpAudioNote upAudioNote = UpAudioNote.getGson().fromJson(dataSnapshot.getValue().toString(), UpAudioNote.class);
+        upAudioNoteList.remove(position);
+        upAudioNoteList.add(position, upAudioNote);
+        notifyItemChanged(position);
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey();
+        int position = keyList.indexOf(key);
+        if (position == -1) {
+            return;
+        }
 
+        keyList.remove(key);
+        upAudioNoteList.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override
@@ -102,14 +125,19 @@ class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHol
      */
     class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        /**
-         * TextView that holds file name
-         */
-        TextView noteTextView;
+        View itemView;
+        TextView titleTextView;
+        TextView startTextView;
+        TextView endTextView;
+        TextView messageTextView;
 
         NoteViewHolder(View itemView) {
             super(itemView);
-            noteTextView = (TextView) itemView.findViewById(android.R.id.text1);
+            this.itemView = itemView;
+            titleTextView = (TextView) itemView.findViewById(R.id.title);
+            startTextView = (TextView) itemView.findViewById(R.id.start_time_text);
+            endTextView = (TextView) itemView.findViewById(R.id.end_time_text);
+            messageTextView = (TextView) itemView.findViewById(R.id.message);
             itemView.setOnClickListener(this);
         }
 

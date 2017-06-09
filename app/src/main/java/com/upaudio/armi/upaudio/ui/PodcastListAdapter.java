@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.upaudio.armi.upaudio.R;
+
 import java.io.File;
 import java.util.List;
 
@@ -32,7 +34,7 @@ class PodcastListAdapter extends RecyclerView.Adapter<PodcastListAdapter.Podcast
     @Override
     public PodcastListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
+                .inflate(R.layout.podcast_list_item, parent, false);
         return new PodcastListViewHolder(itemView);
     }
 
@@ -73,7 +75,7 @@ class PodcastListAdapter extends RecyclerView.Adapter<PodcastListAdapter.Podcast
          */
         PodcastListViewHolder(View itemView) {
             super(itemView);
-            fileNameTextView = (TextView) itemView.findViewById(android.R.id.text1);
+            fileNameTextView = (TextView) itemView.findViewById(R.id.text);
             itemView.setOnClickListener(this);
         }
 

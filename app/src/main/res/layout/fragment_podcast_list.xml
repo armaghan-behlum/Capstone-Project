@@ -5,6 +5,7 @@
     tools:context="com.upaudio.armi.upaudio.ui.PodcastListFragment">
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="?android:attr/actionBarSize"
         android:id="@+id/podcast_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

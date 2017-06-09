@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.upaudio.armi.upaudio.R;
 import com.upaudio.armi.upaudio.io.AudioFilesManager;
 import com.upaudio.armi.upaudio.ui.MainActivity;
 
@@ -57,12 +58,12 @@ public class FileListWidgetRemoteViewFactory implements RemoteViewsService.Remot
     public RemoteViews getViewAt(int position) {
         File file = podcastFiles.get(position);
 
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), android.R.layout.simple_expandable_list_item_1);
-        remoteViews.setTextViewText(android.R.id.text1, file.getName());
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.podcast_list_item);
+        remoteViews.setTextViewText(R.id.text, file.getName());
 
         Intent intent = new Intent();
         intent.putExtra(MainActivity.EXTRA_FILE_NAME, file.getName());
-        remoteViews.setOnClickFillInIntent(android.R.id.text1, intent);
+        remoteViews.setOnClickFillInIntent(R.id.list_item_root, intent);
         return remoteViews;
     }
 

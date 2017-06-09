@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -64,6 +67,7 @@ public class PlayerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         podcastPlayer = PodcastPlayer.getInstance(getActivity().getApplicationContext());
     }
 
@@ -109,6 +113,33 @@ public class PlayerFragment extends Fragment {
             addNoteButton.setImageResource(R.drawable.add_note_grey);
         }
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            menu.add(0, R.id.open_notes, 0, R.string.open_notes).setIcon(R.drawable.open_notes)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.open_notes:
+                Intent intent = new Intent(getActivity(), NotesActivity.class);
+                intent.putExtra(NotesActivity.EXTRA_FILE, currentFileName);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**

@@ -12,6 +12,8 @@
     <string name="note_message">Note: </string>
     <string name="start_time">Start Time: </string>
     <string name="end_time">End Time: </string>
+    <string name="start_time_and_val">Start Time: %d</string>
+    <string name="end_time_and_val">End Time: %d</string>
     <string name="add_note">Add a note</string>
     <string name="save">Save UpAudio</string>
     <string name="appwidget_text">EXAMPLE</string>
@@ -24,4 +26,5 @@
     <string name="sorry_not_signed_in">Sorry, you are not signed in so you cannot use notes</string>
     <string name="sign_in_action">Sign in</string>
     <string name="new_note">New Note</string>
+    <string name="open_notes">Open notes</string>
 </resources>
