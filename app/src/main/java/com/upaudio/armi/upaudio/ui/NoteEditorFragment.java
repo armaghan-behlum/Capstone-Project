@@ -1,6 +1,7 @@
 package com.upaudio.armi.upaudio.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,9 @@ public class NoteEditorFragment extends Fragment implements ValueEventListener {
 
     @BindView(R.id.save_button)
     Button saveButton;
+
+    @BindView(R.id.share_button)
+    Button shareButton;
 
     /**
      * File name of note
@@ -120,6 +124,35 @@ public class NoteEditorFragment extends Fragment implements ValueEventListener {
             public void afterTextChanged(Editable s) {
                 isDataChanged = true;
                 saveButton.setEnabled(true);
+            }
+        });
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StringBuilder stringBuilder = new StringBuilder();
+                String message = stringBuilder
+                        .append(getString(R.string.note_title))
+                        .append(upAudioNote.getNoteName())
+                        .append("\n")
+                        .append(getString(R.string.file_name))
+                        .append(upAudioNote.getFileName())
+                        .append("\n\n")
+                        .append(getString(R.string.start_time))
+                        .append(upAudioNote.getStartTime())
+                        .append("\n")
+                        .append(getString(R.string.end_time))
+                        .append(upAudioNote.getEndTime())
+                        .append("\n\n")
+                        .append(getString(R.string.start_time))
+                        .append(getString(R.string.note_message))
+                        .append(upAudioNote.getNote())
+                        .toString();
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, message);
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, getString(R.string.send_to)));
             }
         });
         updateNote(getActivity().getIntent().getStringExtra(NotesActivity.EXTRA_FILE),
