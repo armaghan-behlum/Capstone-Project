@@ -76,9 +76,11 @@ public class PlayerFragment extends Fragment implements ChildEventListener {
             public void onClick(View v) {
                 if (!isRecording) {
                     isRecording = true;
+                    addNoteButton.setImageResource(R.drawable.add_note_black);
                     startTime = podcastPlayer.getCurrentPosition();
                 } else {
                     isRecording = false;
+                    addNoteButton.setImageResource(R.drawable.add_note_white);
                     UpAudioNote upAudioNote = new UpAudioNote(currentFileName, startTime, podcastPlayer.getCurrentPosition());
                     upAudioNote.setNoteName("new note");
                     final String key = NotesDatabase.getInstance().saveUpAudio(upAudioNote);
