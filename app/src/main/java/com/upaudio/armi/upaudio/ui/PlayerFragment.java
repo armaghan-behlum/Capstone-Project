@@ -69,12 +69,7 @@ public class PlayerFragment extends Fragment implements ChildEventListener {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_player, container, false);
         ButterKnife.bind(this, view);
-
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            String fileToPlay = getArguments().getString(MainActivity.EXTRA_FILE_NAME, "");
-            updateFile(fileToPlay);
-        }
+        updateFile(getActivity().getIntent().getStringExtra(MainActivity.EXTRA_FILE_NAME));
 
         addNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +106,9 @@ public class PlayerFragment extends Fragment implements ChildEventListener {
      * @param fileToPlay file to start playing
      */
     public void updateFile(String fileToPlay) {
+        if (fileToPlay == null) {
+            return;
+        }
         if (currentFileName != null) {
             NotesDatabase.getInstance().unregisterListChangeListener(this, currentFileName);
         }

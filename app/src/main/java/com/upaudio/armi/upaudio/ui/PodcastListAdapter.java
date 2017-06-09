@@ -82,7 +82,7 @@ class PodcastListAdapter extends RecyclerView.Adapter<PodcastListAdapter.Podcast
             Intent intent = new Intent();
             intent.setAction(MainActivity.ACTION_PLAY_FILE);
             intent.putExtra(MainActivity.EXTRA_FILE_NAME, podcastFiles.get(getAdapterPosition()).getAbsolutePath());
-            v.getContext().sendBroadcast(intent);
+            v.getContext().startActivity(intent);
         }
     }
 }

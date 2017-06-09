@@ -14,4 +14,7 @@
     <string name="end_time">End Time: </string>
     <string name="add_note">Add a note</string>
     <string name="save">Save UpAudio</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="error_no_files">Sorry, we found no files</string>
 </resources>

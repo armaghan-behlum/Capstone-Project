@@ -1,16 +1,16 @@
 package com.upaudio.armi.upaudio.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.upaudio.armi.upaudio.R;
+
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,17 +27,17 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Action to play a file
      */
-    public static final String ACTION_PLAY_FILE = "action_play_file";
+    public static final String ACTION_PLAY_FILE = "com.upaudio.armi.ui.ACTION_PLAY_FILE";
+
+    /**
+     * Reference to podcast list fragment
+     */
+    private PodcastListFragment podcastListFragment;
 
     /**
      * Reference to player fragment
      */
     private PlayerFragment playerFragment;
-
-    /**
-     * Broadcast receiver for player play requests
-     */
-    private BroadcastReceiver playerBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +46,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (!getResources().getBoolean(R.bool.twoPaneMode)) {
-            if (savedInstanceState != null) {
-                return;
-            }
-
-            PodcastListFragment podcastListFragment = new PodcastListFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, podcastListFragment).commit();
-        } else {
-            playerFragment = (PlayerFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.player_fragment);
-
+        if (savedInstanceState == null) {
+            onNewIntent(getIntent());
         }
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -70,43 +60,54 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_PLAY_FILE);
-        playerBroadcastReceiver = new PlayerBroadcastReceiver();
-        registerReceiver(playerBroadcastReceiver, intentFilter);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(playerBroadcastReceiver);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-    }
+        setIntent(intent);
+        if (!getResources().getBoolean(R.bool.twoPaneMode)) {
+            if (podcastListFragment == null) {
+                podcastListFragment = new PodcastListFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, podcastListFragment).commit();
+            }
 
-    /**
-     * Receives broadcasts for player play requests
-     */
-    class PlayerBroadcastReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra(EXTRA_FILE_NAME)) {
-                if (!getResources().getBoolean(R.bool.twoPaneMode)) {
+                if (playerFragment == null) {
                     playerFragment = new PlayerFragment();
-                    playerFragment.setArguments(intent.getExtras());
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, playerFragment)
-                            .addToBackStack(null)
+                            .addToBackStack(PlayerFragment.class.toString())
                             .commit();
                 } else {
                     playerFragment.updateFile(intent.getStringExtra(EXTRA_FILE_NAME));
                 }
             }
+        } else {
+           if (playerFragment == null) {
+               playerFragment = (PlayerFragment) getSupportFragmentManager()
+                       .findFragmentById(R.id.player_fragment);
+           }
+           playerFragment.updateFile(intent.getStringExtra(EXTRA_FILE_NAME));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        int topOfStack = getSupportFragmentManager().getBackStackEntryCount() - 1;
+        if (topOfStack > -1) {
+            FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(topOfStack);
+            if (entry.getName().equals(PlayerFragment.class.toString())) {
+                playerFragment = null;
+            }
+        }
+        super.onBackPressed();
     }
 }
