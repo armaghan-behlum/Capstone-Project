@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+import java.util.Date;
 
 import timber.log.Timber;
 
@@ -14,6 +15,11 @@ import timber.log.Timber;
  * Wrapper for Firebase Realtime Database that simplifies calls
  */
 public class NotesDatabase {
+
+    /**
+     * Time stamp used to track sync
+     */
+    private static final String TIME_STAMP = "TIME_STAMP";
 
     /**
      * Static instance of database
@@ -118,5 +124,12 @@ public class NotesDatabase {
     private String getKeyFromFile(String fileName) {
         File file = new File(fileName);
         return file.getName().replace(".", "-");
+    }
+
+    /**
+     * Syncs Firebase database
+     */
+    public void sync() {
+        userRef.child(TIME_STAMP).setValue(System.currentTimeMillis());
     }
 }
