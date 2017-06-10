@@ -53,6 +53,16 @@ public class PodcastPlayer {
     private TrackSelector trackSelector;
 
     /**
+     * Current file playing
+     */
+    private String currentFile;
+
+    /**
+     * Current view used for playing
+     */
+    private SimpleExoPlayerView currentView;
+
+    /**
      * Private constructor to ensure only one is made
      *
      * @param context context for exoplayer
@@ -89,6 +99,11 @@ public class PodcastPlayer {
      * @param fileToPlay location of file to be played
      */
     public void start(SimpleExoPlayerView simpleExoPlayerView, String fileToPlay) {
+        if (fileToPlay.equals(currentFile)) {
+            SimpleExoPlayerView.switchTargetView(player, currentView, simpleExoPlayerView);
+            currentView = simpleExoPlayerView;
+            return;
+        }
         releasePlayer();
 
         player = ExoPlayerFactory.newSimpleInstance(simpleExoPlayerView.getContext(), trackSelector);
@@ -97,6 +112,8 @@ public class PodcastPlayer {
         simpleExoPlayerView.setPlayer(player);
         player.setPlayWhenReady(true);
         player.prepare(videoSource);
+        currentView = simpleExoPlayerView;
+        currentFile = fileToPlay;
     }
 
     /**
